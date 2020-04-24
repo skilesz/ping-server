@@ -7,7 +7,7 @@ git-commit:
 	git push -u origin master
 
 ping-server: ping_server.c
-	gcc -werror -wall -g -o ping_server ping_server.c -I
+	gcc -Werror -Wall -g -o ping_server ping_server.c ping_server.h
 
 .PHONY: clean
 

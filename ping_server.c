@@ -11,7 +11,7 @@ Last Updated: 4-23-2020 8:15 pm
 
 //Checksum for incoming packets
 int checksum(void *bin, int len) {
-
+  return 1;
 } //checksum()
 
 //DNS lookup
