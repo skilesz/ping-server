@@ -135,7 +135,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
     //Send packet
     clock_gettime(CLOCK_MONOTONIC, &time_start);
     if (sendto(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr *) &addr, sizeof(*addr)) <= 0) {
-      printf("\nFailed to send packet.\n");
+      printf("Failed to send packet.\n");
       flag = 0;
     }
 
@@ -143,7 +143,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
     addr_len = sizeof(r_addr);
 
     if (recvfrom(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr *) &r_addr, &addr_len) <= 0 && msg_count > 1) {
-      printf("\nFailed to receive packet.\n");
+      printf("Failed to receive packet.\n");
     } else {
       clock_gettime(CLOCK_MONOTONIC, &time_end);
 
@@ -155,7 +155,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
         if (!(pckt.header.type == 69 && pckt.header.code == 0)) {
           printf("Error... Packet received with ICMP type %d code %d\n", pckt.header.type, pckt.header.code);
         } else {
-          printf("\nReceived %d bytes from %s (Domain: %s) (IP: %s)\nmsg_seq=%d TTL=%d RTT=%Lf ms\n",
+          printf("Received %d bytes from %s (Domain: %s) (IP: %s)\nmsg_seq=%d TTL=%d RTT=%Lf ms\n",
                  PACKET_SIZE, input, name, ip_addr, msg_count, ttl_val, rtt_msec);
           num_rec++;
         }
@@ -169,7 +169,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
   total_msec = (tfe.tv_sec - tfs.tv_sec) * 1000.0 + timeElapsed;
 
   printf("\n///---%s ping stats---\\\\\\\n", input);
-  printf("\n%d packets sent, %d packets received, %f%% packet loss\nTotal time: %Lf ms\n\n",
+  printf("%d packets sent, %d packets received, %f%% packet loss\nTotal time: %Lf ms\n\n",
          msg_count, num_rec, ((msg_count - num_rec) / msg_count) * 100.0, total_msec);
 } //ping()
 
