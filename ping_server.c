@@ -169,7 +169,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
   total_msec = (tfe.tv_sec - tfs.tv_sec) * 1000.0 + timeElapsed;
 
   printf("\n///---%s ping stats---\\\\\\\n", input);
-  printf("%d packets sent, %d packets received, %f%% packet loss\nTotal time: %Lf ms\n\n",
+  printf("%d packets sent, %d packets received, %f%% packet loss\nTotal time: %.1Lf ms\n\n",
          msg_count, num_rec, ((msg_count - num_rec) / msg_count) * 100.0, total_msec);
 } //ping()
 
