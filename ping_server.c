@@ -36,7 +36,24 @@ char *dns_lookup(char *dest_name, struct sockaddr_in *addr) {
 
 //Reverse DNS lookup
 char *reverse_lookup(char *dest_ip) {
+  struct sockaddr_in temp_addr;
+  socklen_t len;
+  char buf[NI_MAXHOST];
+  char *ret_buf;
 
+  temp_addr.sin_family = AF_INET;
+  temp_addr.sin_addr.s_addr = inet_addr(ip_addr);
+  len = sizeof(struct sockaddr_in);
+
+  if (getnameinfo((struct sockaddr *) &temp_addr, len, buf, sizeof(buf), NULL, 0, NI_NAMEREQD)) {
+    printf("\nCould not perform reverse lookup of hostname.\n");
+    return NULL;
+  }
+
+  ret_buf = (char *) malloc((strlen(buf) + 1) * sizeof(char));
+  strcpy(ret_buf, buf);
+
+  return ret_buf;
 } //reverse_lookup()
 
 int main(int argc, char *argv[]) {
