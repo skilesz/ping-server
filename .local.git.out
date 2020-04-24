@@ -32,3 +32,9 @@ M	Makefile
 M	ping_server.c
 M	ping_server.h
 Your branch is up to date with 'origin/master'.
+[master ddb44c4] New commit
+ 5 files changed, 69 insertions(+), 1 deletion(-)
+ create mode 100644 .ping_server.h.swp
+M	.local.git.out
+M	ping_server.c
+Your branch is up to date with 'origin/master'.

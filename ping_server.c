@@ -46,11 +46,11 @@ int main(int argc, char *argv[]) {
   struct sockaddr_in addr;
 
   if (argc < 2) {
-    printf("\nUSAGE: ./ping_server <host_name_or_ip> (<ttl>)\n";
+    printf("\nUSAGE: ./ping_server <host_name_or_ip> (<ttl>)\n");
     return 0;
   }
 
-  ip_addr = dns_lookup(argv[1], addr);
+  ip_addr = dns_lookup(argv[1], &addr);
 
   if (!ip_addr) {
     printf("\nCould not resolve hostname.\n");
