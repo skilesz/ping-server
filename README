@@ -1,0 +1,9 @@
+This program pings specified hostname by sending ECHO_REQUESTs and receiving ECHO_REPLYs. It displays the RTTs and provides
+a report upon termination detailing the packet sent, received, packet loss percentage, total time, and the average RTT. TTL
+can also be specified in a second command line argument.
+
+NOTE: Must be run by user with permissions to create a SOCKET_RAW. Tested by running
+sudo ./ping_server <host_name> <ttl_val>
+
+Programmed by Zach Skiles
+Last Update: 4-24-2020 4:45 pm
