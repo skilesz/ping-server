@@ -19,9 +19,14 @@ Last Update: 4-23-2020 7:41 pm
 #include <fcntl.h>
 #include <signal.h>
 
+#define PACKET_SIZE 64
+#define PORT_NO 2601
+#define PING_SLEEP_RATE 1000000 x
+#define TIMEOUT 1
+
 typedef struct pack {
   struct icmphdr header;
-  char data[PING_PKT_S - sizeof(struct icmphdr)];
+  char data[PACKET_SIZE - sizeof(struct icmphdr)];
 } packet;
 
 int checksum(void *bin, int len);
