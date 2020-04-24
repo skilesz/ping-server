@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
   //Socket setup
   master_socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
   if (master_socket < 0) {
-    perror("Socket error\n");
+    perror("\nSocket error");
     printf("Failed to create socket.\n");
     return 0;
   }
