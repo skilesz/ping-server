@@ -93,3 +93,10 @@ M	.local.git.out
 M	Makefile
 M	ping_server
 Your branch is up to date with 'origin/master'.
+[master 798451b] New commit
+ 3 files changed, 9 insertions(+), 2 deletions(-)
+ rewrite ping_server (99%)
+ mode change 100644 => 100755
+M	.local.git.out
+D	ping_server
+Your branch is up to date with 'origin/master'.
