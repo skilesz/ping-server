@@ -42,7 +42,7 @@ char *reverse_lookup(char *dest_ip) {
   char *ret_buf;
 
   temp_addr.sin_family = AF_INET;
-  temp_addr.sin_addr.s_addr = inet_addr(ip_addr);
+  temp_addr.sin_addr.s_addr = inet_addr(dest_ip);
   len = sizeof(struct sockaddr_in);
 
   if (getnameinfo((struct sockaddr *) &temp_addr, len, buf, sizeof(buf), NULL, 0, NI_NAMEREQD)) {
