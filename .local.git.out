@@ -100,3 +100,9 @@ Your branch is up to date with 'origin/master'.
 M	.local.git.out
 D	ping_server
 Your branch is up to date with 'origin/master'.
+[master 6cda867] New commit
+ 2 files changed, 7 insertions(+)
+ delete mode 100755 ping_server
+M	.local.git.out
+M	Makefile
+Your branch is up to date with 'origin/master'.
