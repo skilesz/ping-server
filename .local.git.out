@@ -25,3 +25,10 @@ Your branch is up to date with 'origin/master'.
 M	.local.git.out
 M	ping_server.h
 Your branch is up to date with 'origin/master'.
+[master 7a4c5b4] New commit
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+M	.local.git.out
+M	Makefile
+M	ping_server.c
+M	ping_server.h
+Your branch is up to date with 'origin/master'.

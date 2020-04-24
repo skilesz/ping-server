@@ -8,3 +8,8 @@ git-commit:
 
 ping-server: ping_server.c
 	gcc -werror -wall -g -o ping_server ping_server.c -I
+
+.PHONY: clean
+
+clean:
+	rm ping_server

@@ -24,6 +24,8 @@ Last Update: 4-23-2020 7:41 pm
 #define PING_SLEEP_RATE 1000000 x
 #define TIMEOUT 1
 
+int ping_cont = 1;
+
 typedef struct pack {
   struct icmphdr header;
   char data[PACKET_SIZE - sizeof(struct icmphdr)];
