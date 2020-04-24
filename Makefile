@@ -6,8 +6,8 @@ git-commit:
 	git commit -a -m "New commit" >> .local.git.out || echo
 	git push -u origin master
 
-ping-server: ping_server.c
-	gcc -Werror -Wall -g -o ping_server ping_server.c ping_server.h
+ping-server: ping_server.c ping_server.h
+	gcc -g -Wall -Werror -o ping_server ping_server.c ping_server.h
 
 .PHONY: clean
 
