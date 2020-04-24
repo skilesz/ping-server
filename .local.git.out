@@ -160,3 +160,9 @@ Your branch is up to date with 'origin/master'.
 M	.local.git.out
 M	ping_server.c
 Your branch is up to date with 'origin/master'.
+[master 3928a1b] New commit
+ 3 files changed, 77 insertions(+), 2 deletions(-)
+ create mode 100644 .ping_server.h.swp
+M	.local.git.out
+D	.ping_server.h.swp
+Your branch is up to date with 'origin/master'.
