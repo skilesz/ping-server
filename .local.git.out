@@ -60,3 +60,10 @@ Your branch is up to date with 'origin/master'.
 M	.local.git.out
 D	.ping_server.h.swp
 Your branch is up to date with 'origin/master'.
+[master 06da562] New commit
+ 2 files changed, 5 insertions(+)
+ rename .ping_server.h.swp => .ping_server.c.swp (69%)
+M	.local.git.out
+D	.ping_server.c.swp
+M	ping_server.c
+Your branch is up to date with 'origin/master'.

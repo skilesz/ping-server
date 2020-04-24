@@ -57,12 +57,12 @@ char *reverse_lookup(char *dest_ip) {
 } //reverse_lookup()
 
 //Send and receive ping requests
-void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr, char *input) {
+void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr, char *input, int ttl_val) {
   printf("PING!\n");
 } //ping()
 
 //Interrupt handler
-extern "C" void sig_handle(int signal) {
+void sig_handle(int signal) {
   ping_cont = 0;
 } //sig_handle()
 
@@ -113,13 +113,13 @@ int main(int argc, char *argv[]) {
     return 0;
   }
 
-  printf("Socket created (file descriptor %s)\n", master_socket);
+  printf("Socket created (file descriptor %d)\n", master_socket);
 
   //Catch SIGINT
   signal(SIGINT, sig_handle);
 
   //Send pings
-  ping(master_socket, addr, host_name, ip_addr, argv[1]);
+  ping(master_socket, &addr, host_name, ip_addr, argv[1], ttl_val);
 
   return 0;
 } //main()
