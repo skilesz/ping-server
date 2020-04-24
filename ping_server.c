@@ -29,6 +29,8 @@ int checksum(void *bin, int len) {
   return result;
 } //checksum()
 
+
+
 //DNS lookup
 char *dns_lookup(char *dest_name, struct sockaddr_in *addr) {
   printf("\nDNS lookup...\n");
@@ -48,6 +50,8 @@ char *dns_lookup(char *dest_name, struct sockaddr_in *addr) {
 
   return ip_addr;
 } //dns_lookup()
+
+
 
 //Reverse DNS lookup
 char *reverse_lookup(char *dest_ip) {
@@ -71,20 +75,22 @@ char *reverse_lookup(char *dest_ip) {
   return ret_buf;
 } //reverse_lookup()
 
+
+
 //Send and receive ping requests
 void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr, char *input, int ttl_val) {
   int msg_count = 0;
-  //int addr_len;
-  //int num_rec = 0;
+  int addr_len;
+  int num_rec = 0;
 
   packet pckt;
-  //struct sockaddr_in r_addr;
-  //struct timespec time_start;
-  //struct timespec time_end;
+  struct sockaddr_in r_addr;
+  struct timespec time_start;
+  struct timespec time_end;
   struct timespec tfs;
-  //struct timespec tfe;
-  //long double rtt_msec = 0;
-  //long double total_msec = 0;
+  struct timespec tfe;
+  long double rtt_msec = 0;
+  long double total_msec = 0;
   struct timeval tv_out;
   tv_out.tv_sec = TIMEOUT;
   tv_out.tv_usec = 0;
@@ -106,7 +112,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
   while (ping_cont) {
 
     //Represents whether the packet was sent or not
-    //int flag = 1;
+    int flag = 1;
 
     //Packet setup
     bzero(&pckt, sizeof(pckt));
@@ -124,17 +130,57 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
     pckt.header.un.echo.sequence = msg_count++;
     pckt.header.checksum = checksum(&pckt, sizeof(pckt));
 
-    printf("\nChecksum.\n");
+    usleep(PING_SLEEP_RATE);
 
-    break;
-  }
+    //Send packet
+    clock_gettime(CLOCK_MONOTONIC, &time_start);
+    if (sendto(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr_in *) addr, sizeof(*addr)) <= 0) {
+      printf("\nFailed to send packet.\n");
+      flag = 0;
+    }
 
+    //Receive packet
+    addr_len = sizeof(r_addr);
+
+    if (recvfrom(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr_in *) &r_addr, &addr_len) <= 0 && msg_count > 1) {
+      printf("\nFailed to receive packet.\n");
+    } else {
+      clock_gettime(CLOCK_MONOTONIC, &time_end);
+
+      double timeElapsed = ((double) (time_end.tv_nsec - time_start.tv_nsec)) / 1000000.0;
+      rtt_msec = (time_end.tv_sec - time_start.tv_sec) * 1000.0 + timeElapsed;
+
+      //Only receive if packet was sent
+      if (flag) {
+        if (!(pckt.header.type == 69 && pckt.header.code == 0)) {
+          printf("Error... Packet received with ICMP type %d code %d\n", pckt.header.type, pckt.header.code);
+        } else {
+          printf("\nReceived %d bytes from %s (Domain: %s) (IP: %s)\nmsg_seq=%d TTL=%d RTT=%Lf ms\n",
+                 PACKET_SIZE, input, name, ip_addr, msg_count, ttl_val, rtt_msec);
+          num_rec++;
+        }
+      } //end if
+    } //end else
+  } //end while
+
+  clock_gettime(CLOCK_MONOTONIC, &tfe);
+  double timeElapsed = ((double) (tfe.tv_nsec - tfs.tv_nsec)) / 1000000.0;
+
+  total_msec = (tfe.tv_sec - tfs.tv_sec) * 1000.0 + timeElapsed;
+
+  printf("\n///---%s ping stats---\\\\\\\n");
+  printf("\n%d packets sent, %d packets received, %f%% packet loss\nTotal time: %Lf ms\n\n",
+         msg_count, num_rec, ((msg_count - num_rec) / msg_count) * 100.0, total_msec);
 } //ping()
+
+
 
 //Interrupt handler
 void sig_handle(int signal) {
   ping_cont = 0;
 } //sig_handle()
+
+
 
 //MAIN
 int main(int argc, char *argv[]) {
