@@ -80,7 +80,7 @@ char *reverse_lookup(char *dest_ip) {
 //Send and receive ping requests
 void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr, char *input, int ttl_val) {
   int msg_count = 0;
-  unsigned int restrict addr_len;
+  unsigned int addr_len;
   int num_rec = 0;
 
   packet pckt;
@@ -134,7 +134,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
 
     //Send packet
     clock_gettime(CLOCK_MONOTONIC, &time_start);
-    if (sendto(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr_in *) &addr, sizeof(*addr)) <= 0) {
+    if (sendto(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr *) &addr, sizeof(*addr)) <= 0) {
       printf("\nFailed to send packet.\n");
       flag = 0;
     }
@@ -142,7 +142,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
     //Receive packet
     addr_len = sizeof(r_addr);
 
-    if (recvfrom(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr_in *restrict) &r_addr, &addr_len) <= 0 && msg_count > 1) {
+    if (recvfrom(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr *) &r_addr, &addr_len) <= 0 && msg_count > 1) {
       printf("\nFailed to receive packet.\n");
     } else {
       clock_gettime(CLOCK_MONOTONIC, &time_end);
