@@ -236,6 +236,9 @@ int main(int argc, char *argv[]) {
   //Catch SIGINT
   signal(SIGINT, sig_handle);
 
+  //Catch SIGPIPE
+  signal(SIGPIPE, SIG_IGN);
+
   //Send pings
   ping(master_socket, &addr, host_name, ip_addr, argv[1], ttl_val);
 
