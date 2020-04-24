@@ -75,7 +75,7 @@ char *reverse_lookup(char *dest_ip) {
 void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr, char *input, int ttl_val) {
   int msg_count = 0;
   //int addr_len;
-  int flag = 1;
+  int flag;
   //int num_rec = 0;
 
   packet pckt;
