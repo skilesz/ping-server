@@ -12,7 +12,21 @@ Last Updated: 4-23-2020 8:15 pm
 
 //Checksum for incoming packets
 int checksum(void *bin, int len) {
-  return 1;
+  unsigned short *buf = b;
+  unsigned int sum = 0;
+  unsigned short result;
+
+  for (sum = 0; len > 1; len -= 2) {
+    sum += *buf++;
+  }
+  if (len == 1) {
+    sum += *(unsigned char *) buf;
+  }
+  sum = (sum >> 16) + (sum & 0xFFFF);
+  sum += (sum >> 16);
+  result = ~sum;
+
+  return result;
 } //checksum()
 
 //DNS lookup
@@ -59,7 +73,62 @@ char *reverse_lookup(char *dest_ip) {
 
 //Send and receive ping requests
 void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr, char *input, int ttl_val) {
-  printf("PING!\n");
+  int msg_count = 0;
+  int addr_len;
+  int flag = 1;
+  int num_rec = 0;
+
+  packet pckt;
+  struct sockaddr_in r_addr;
+  struct timespec time_start;
+  struct timespec time_end;
+  struct timespec tfs;
+  struct timespec tfe;
+  long double rtt_msec = 0;
+  long double total_msec = 0;
+  struct timeval tv_out;
+  tv_out.tv_sec = TIMEOUT;
+  tv_out.tv_usec = 0;
+
+  clock_gettime(CLOCK_MONOTONIC, &tfs);
+
+  //Set socket ttl
+  if (setsockopt(master_socket, SOL_IP, IP_TTL, &ttl_val, sizeof(ttl_val)) != 0) {
+    printf("\nFailed to set socket TTL value.\n");
+    return;
+  } else {
+    printf("\nTTL set.\n");
+  }
+
+  //Set receive timeout
+  setsockopt(master_socket, SOL_SOCKET, SO_RVCTIMEO, (const char *) &tv_out, sizeof(tv_out));
+
+  //Infinite loop of echo_requests
+  while (ping_cont) {
+
+    //Represents whether the packet was sent or not
+    flag = 1;
+
+    //Packet setup
+    bzero(&pckt, sizeof(pckt));
+
+    pckt.hdr.type = ICMP_ECHO;
+    pckt.hdr.un.echo.id = getpid();
+
+    for (int i = 0; i < sizeof(pckt.msg) - 1; i++) {
+      //Fill packet
+      pckt.msg[i] = i + '0';
+    }
+
+    pckt.msg[i] = 0;
+    pckt.hdr.un.echo.sequence = msg_count++;
+    pckt.hdr.checksum = checksum(&pckt, sizeof(pckt));
+
+    printf("\nChecksum.\n");
+
+    break;
+  }
+
 } //ping()
 
 //Interrupt handler
@@ -67,6 +136,7 @@ void sig_handle(int signal) {
   ping_cont = 0;
 } //sig_handle()
 
+//MAIN
 int main(int argc, char *argv[]) {
   int master_socket;
   char *ip_addr;
