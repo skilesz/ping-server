@@ -75,7 +75,7 @@ char *reverse_lookup(char *dest_ip) {
 void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr, char *input, int ttl_val) {
   int msg_count = 0;
   //int addr_len;
-  //int flag = 1;
+  int flag = 1;
   //int num_rec = 0;
 
   packet pckt;
@@ -115,7 +115,8 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
     pckt.header.type = ICMP_ECHO;
     pckt.header.un.echo.id = getpid();
 
-    for (int i = 0; i < sizeof(pckt.data) - 1; i++) {
+    int i;
+    for (i = 0; i < sizeof(pckt.data) - 1; i++) {
       //Fill packet
       pckt.data[i] = i + '0';
     }
