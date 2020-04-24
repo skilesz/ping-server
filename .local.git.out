@@ -204,3 +204,12 @@ M	.local.git.out
 M	ping_server
 M	ping_server.c
 Your branch is up to date with 'origin/master'.
+[master 8a60a0b] New commit
+ 3 files changed, 64 insertions(+), 12 deletions(-)
+ rewrite ping_server (99%)
+ mode change 100644 => 100755
+M	.local.git.out
+M	ping_server
+M	ping_server.c
+M	ping_server.h
+Your branch is up to date with 'origin/master'.

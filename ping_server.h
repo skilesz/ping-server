@@ -22,7 +22,7 @@ Last Update: 4-23-2020 7:41 pm
 
 #define PACKET_SIZE 64
 #define PORT_NO 2601
-#define PING_SLEEP_RATE 1000000 x
+#define PING_SLEEP_RATE 1000000
 #define TIMEOUT 1
 
 int ping_cont = 1;
