@@ -18,6 +18,7 @@ Last Update: 4-23-2020 7:41 pm
 #include <time.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <ctype.h>
 
 #define PACKET_SIZE 64
 #define PORT_NO 2601
@@ -34,4 +35,4 @@ typedef struct pack {
 int checksum(void *bin, int len);
 char *dns_lookup(char *dest_name, struct sockaddr_in *addr);
 char *reverse_lookup(char *dest_ip);
-void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr, char *input);
+void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr, char *input, int ttl_val);
