@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
   printf("Reverse lookup domain: %s\n", host_name);
 
   //Socket setup
-  master_socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+  master_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_ICMP);
   if (master_socket < 0) {
     printf("\nFailed to create socket.\n");
     return 0;
