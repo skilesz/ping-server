@@ -5,3 +5,8 @@ Your branch is up to date with 'origin/master'.
  create mode 100644 .local.git.out
 M	.local.git.out
 Your branch is up to date with 'origin/master'.
+[master 4356707] New commit
+ 1 file changed, 5 insertions(+)
+M	.local.git.out
+M	Makefile
+Your branch is up to date with 'origin/master'.

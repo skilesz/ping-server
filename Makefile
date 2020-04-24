@@ -5,4 +5,4 @@ git-commit:
 	git push -u origin master
 
 ping-server:
-	gcc -werror -wall -std=c99 -g -o ping_server ping_server.c ping_header.h
+	gcc -werror -wall -std=c99 -g -o ping_server ping_server.c
