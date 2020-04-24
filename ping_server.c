@@ -75,7 +75,6 @@ char *reverse_lookup(char *dest_ip) {
 void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr, char *input, int ttl_val) {
   int msg_count = 0;
   //int addr_len;
-  int flag;
   //int num_rec = 0;
 
   packet pckt;
@@ -107,7 +106,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
   while (ping_cont) {
 
     //Represents whether the packet was sent or not
-    flag = 1;
+    int flag = 1;
 
     //Packet setup
     bzero(&pckt, sizeof(pckt));
