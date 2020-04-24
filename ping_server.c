@@ -3,7 +3,7 @@ Application that sends an echo_request to specified server, then waits for an ec
 RTT (min, max, and avg) and the loss percentage based on the number of packets sent and received.
 
 Programmed by Zach Skiles, skilesz@purdue.edu
-Last Updated: 4-23-2020 8:15 pm
+Last Updated: 4-24-2020 4:26 pm
 */
 
 #include "ping_server.h"
@@ -91,6 +91,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
   struct timespec tfe;
   long double rtt_msec = 0;
   long double total_msec = 0;
+  long double total_rtt_msec = 0;
   struct timeval tv_out;
   tv_out.tv_sec = TIMEOUT;
   tv_out.tv_usec = 0;
@@ -102,7 +103,8 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
     printf("\nFailed to set socket TTL value.\n");
     return;
   } else {
-    printf("\nTTL set.\n");
+    printf("\nTTL set: %d\n", ttl_val);
+    printf("Pinging %s (%s)\n\n", input, ip_addr);
   }
 
   //Set receive timeout
@@ -132,9 +134,12 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
 
     usleep(PING_SLEEP_RATE);
 
+    //inet_pton(AF_INET, ip_addr, &addr);
+
     //Send packet
     clock_gettime(CLOCK_MONOTONIC, &time_start);
-    if (sendto(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr *) &addr, sizeof(*addr)) <= 0) {
+    if (sendto(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr *) addr, sizeof(*addr)) <= 0) {
+      perror("sendto()");
       printf("Failed to send packet.\n");
       flag = 0;
     }
@@ -143,6 +148,7 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
     addr_len = sizeof(r_addr);
 
     if (recvfrom(master_socket, &pckt, sizeof(pckt), 0, (struct sockaddr *) &r_addr, &addr_len) <= 0 && msg_count > 1) {
+      perror("recvfrom()");
       printf("Failed to receive packet.\n");
     } else {
       clock_gettime(CLOCK_MONOTONIC, &time_end);
@@ -155,9 +161,10 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
         if (!(pckt.header.type == 69 && pckt.header.code == 0)) {
           printf("Error... Packet received with ICMP type %d code %d\n", pckt.header.type, pckt.header.code);
         } else {
-          printf("Received %d bytes from %s (Domain: %s) (IP: %s)\nmsg_seq=%d TTL=%d RTT=%Lf ms\n",
-                 PACKET_SIZE, input, name, ip_addr, msg_count, ttl_val, rtt_msec);
+          printf("%d bytes from %s (%s): msg_seq=%d TTL=%d RTT=%.1Lf ms\n",
+                 PACKET_SIZE, name, ip_addr, msg_count, ttl_val, rtt_msec);
           num_rec++;
+          total_rtt_msec += rtt_msec;
         }
       } //end if
     } //end else
@@ -169,8 +176,8 @@ void ping(int master_socket, struct sockaddr_in *addr, char *name, char *ip_addr
   total_msec = (tfe.tv_sec - tfs.tv_sec) * 1000.0 + timeElapsed;
 
   printf("\n///---%s ping stats---\\\\\\\n", input);
-  printf("%d packets sent, %d packets received, %f%% packet loss\nTotal time: %.1Lf ms\n\n",
-         msg_count, num_rec, ((msg_count - num_rec) / msg_count) * 100.0, total_msec);
+  printf("%d packets sent, %d packets received, %.0f%% packet loss, total time: %.0Lf ms\nAverage RTT: %.3Lf ms\n\n",
+         msg_count, num_rec, ((msg_count - num_rec) / msg_count) * 100.0, total_msec, total_rtt_msec / num_rec);
 } //ping()
 
 
@@ -224,7 +231,7 @@ int main(int argc, char *argv[]) {
   printf("Reverse lookup domain: %s\n", host_name);
 
   //Socket setup
-  master_socket = socket(AF_INET, SOCK_STREAM, 0);
+  master_socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
   if (master_socket < 0) {
     perror("\nSocket error");
     printf("Failed to create socket.\n");
