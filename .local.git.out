@@ -55,3 +55,8 @@ M	.ping_server.h.swp
 M	ping_server.c
 M	ping_server.h
 Your branch is up to date with 'origin/master'.
+[master ce5b932] New commit
+ 4 files changed, 52 insertions(+), 3 deletions(-)
+M	.local.git.out
+D	.ping_server.h.swp
+Your branch is up to date with 'origin/master'.
