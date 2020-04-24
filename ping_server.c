@@ -7,6 +7,7 @@ Last Updated: 4-23-2020 8:15 pm
 */
 
 #include "ping_server.h"
+#include <errno.h>
 
 
 //Checksum for incoming packets
@@ -107,9 +108,11 @@ int main(int argc, char *argv[]) {
   printf("Reverse lookup domain: %s\n", host_name);
 
   //Socket setup
-  master_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_ICMP);
+  master_socket = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
   if (master_socket < 0) {
-    printf("\nFailed to create socket.\n");
+    int errsv = errno;
+    printf("ERRNO: %d\n", errsv);
+    printf("Failed to create socket.\n");
     return 0;
   }
 
